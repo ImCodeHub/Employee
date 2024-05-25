@@ -13,7 +13,7 @@ public class Employee {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    
+
     @Column(name="first_name")
     private String firstName;
     
@@ -24,6 +24,5 @@ public class Employee {
     private String email;
 
     private String department;
-
 }
 
