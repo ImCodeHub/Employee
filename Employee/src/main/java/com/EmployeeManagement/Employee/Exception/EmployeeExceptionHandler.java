@@ -28,9 +28,9 @@ public class EmployeeExceptionHandler {
     public ResponseEntity<?> handleEmailAlreadyExistException(EmailAlreadyExistException ex, WebRequest request){
         return new ResponseEntity<>(ex.getMessage(), HttpStatus.CONFLICT);
     }
-    
-    @ExceptionHandler(EmailAlreadyExistException.class)
-    public ResponseEntity<?> handleEmailAlreadyExistException(EmailAlreadyExistException ex, WebRequest request){
-        return new ResponseEntity<>(ex.getMessage(), HttpStatus.CONFLICT);
+
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<?> handleGlobalException(Exception ex, WebRequest request) {
+        return new ResponseEntity<>("An unexpected error occurred: " + ex.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
     }
 }
