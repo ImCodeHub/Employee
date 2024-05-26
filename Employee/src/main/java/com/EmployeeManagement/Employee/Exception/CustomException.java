@@ -1,20 +1,20 @@
 package com.EmployeeManagement.Employee.Exception;
 
 public class CustomException {
-    public class EmployeeNotFoundException extends RuntimeException{
+    public static class EmployeeNotFoundException extends RuntimeException{
         // this is constructor below.
         public EmployeeNotFoundException(String message){
             super(message);
         }
     }  
     
-    public class InvalidEmailException extends RuntimeException{
+    public static class InvalidEmailException extends RuntimeException{
         public InvalidEmailException(String message){
             super(message);
         }
     }
 
-    public class EmailAlreadyExistException extends RuntimeException{
+    public static class EmailAlreadyExistException extends RuntimeException{
         public EmailAlreadyExistException(String message){
             super(message);
         }
