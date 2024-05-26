@@ -41,22 +41,13 @@ public class EmployeeController {
     @PostMapping("employee/{id}")
     public ResponseEntity<List<AddEmployee>> getEmployee(@PathVariable Long id) {
         List<AddEmployee> employee = employeeServiceImpl.getEmployeeById(id);
-        if (employee != null) {
             return new ResponseEntity<>(employee, HttpStatus.OK);
-        } else {
-            return new ResponseEntity<>(employee, HttpStatus.NOT_FOUND);
-        }
     }
 
     @PostMapping("update/{id}")
     public ResponseEntity<String> updateEmpl(@PathVariable Long id, @RequestBody AddEmployee addEmployee) {
-        try {
             String response = employeeServiceImpl.updateEmployee(id, addEmployee);
             return new ResponseEntity<>(response, HttpStatus.OK);
-        } catch (Exception e) {
-            return new ResponseEntity<>("Something went wrong."+e.getMessage(), HttpStatus.NOT_FOUND);
-        }
-
     }
 
     @DeleteMapping("delete/{id}")
