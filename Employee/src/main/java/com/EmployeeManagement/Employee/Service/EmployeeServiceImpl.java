@@ -1,8 +1,6 @@
 package com.EmployeeManagement.Employee.Service;
 
-import java.util.ArrayList;
 import java.util.*;
-import java.util.Optional;
 
 import org.slf4j.LoggerFactory;
 import org.slf4j.Logger;
@@ -10,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.EmployeeManagement.Employee.Entity.Employee;
+import com.EmployeeManagement.Employee.Exception.CustomException.*;
 import com.EmployeeManagement.Employee.Model.AddEmployee;
 import com.EmployeeManagement.Employee.Repository.EmployeeRepository;
 
@@ -25,6 +24,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class EmployeeServiceImpl implements EmployeeService {
 
+    // logger
     private static final Logger logger = LoggerFactory.getLogger(EmployeeService.class);
 
     @Autowired
@@ -42,11 +42,11 @@ public class EmployeeServiceImpl implements EmployeeService {
             String email = addEmployee.getEmail();
             if (!validate.isValidEmail(email)) {
                 logger.warn("Invalid Email formate: {}",email);
-                return "Email is not valid";
+                throw new InvalidEmailException("Email is not valid.");
             }
             if (!validate.isEmailUnique(email)) {
                 logger.warn("Email already Exist: {}", email);
-                return "Email is already Exist. Kindly change the email id.";
+                throw new EmailAlreadyExistException( "Email is already Exist. Kindly change the email id.");
             }
             employee.setFirstName(addEmployee.getFirstName());
             employee.setLastName(addEmployee.getLastName());
@@ -58,7 +58,7 @@ public class EmployeeServiceImpl implements EmployeeService {
             return "employee details saved.";
         }
         logger.error("AddEmployee Object is null ");
-        return "somthing went wrong unable to save the details.";
+        throw new RuntimeException( "somthing went wrong unable to save the details.");
     }
 
     // Retrive all the Employee list.
@@ -75,7 +75,7 @@ public class EmployeeServiceImpl implements EmployeeService {
                 addEmployee.setEmail(employee.getEmail());
                 addEmployee.setDepartment(employee.getDepartment());
 
-                logger.info("Retrieve the data: {}", addEmployee);
+                // logger.info("Retrieve the data: {}", addEmployee);
                 employeeList.add(addEmployee);
             }
             logger.info("Employee data is retrieve.");
@@ -102,9 +102,11 @@ public class EmployeeServiceImpl implements EmployeeService {
 
             responseList.add(addEmployee);
 
+            logger.info("Employee Found By this ID :- {}",addEmployee);
             return responseList;
         } else {
-            return null;
+            logger.error("Employee not found by this id:- {}",id);
+            throw new EmployeeNotFoundException("Employee not found with id: "+id);
         }
     }
 
@@ -117,12 +119,14 @@ public class EmployeeServiceImpl implements EmployeeService {
             String email = addEmployee.getEmail();
             // validate the email.
             if (!validate.isValidEmail(email)) {
-                return "Email is not valid";
+                logger.warn("Invalid E-mail formate: {}", email);
+                throw new InvalidEmailException("Email is not valid.");
             }
 
             // validate whether email id Unique.
             if (!validate.isEmailUnique(email)) {
-                return "Email is already Exist. Kindly change the email id.";
+                logger.warn("E-mail Id is already Exist: {}", email);
+                throw new EmailAlreadyExistException( "Email is already Exist. Kindly change the email id.");
             }
             employee.setFirstName(addEmployee.getFirstName());
             employee.setLastName(addEmployee.getLastName());
@@ -131,10 +135,12 @@ public class EmployeeServiceImpl implements EmployeeService {
 
             employeeRepository.save(employee);
 
+            logger.info("Employee details updated for this email: {}", email);
             return "Employee Details have been updated successfully!";
 
         } else {
-            return "Employee Not Found.";
+            logger.error("Employee details not found by this ID :{}", id);
+            throw new EmployeeNotFoundException("Employee not found with id: "+id);
         }
     }
 
@@ -143,10 +149,12 @@ public class EmployeeServiceImpl implements EmployeeService {
     public Boolean deleteEmployee(Long id) {
         Optional<Employee> optional = employeeRepository.findById(id);
         if (optional.isPresent()) {
+            logger.info("Employee Data deleted for this ID : {}", id);
             employeeRepository.deleteById(id);
             return true;
         } else {
-            return false;
+            logger.error("Employee not found by this ID:{}", id);
+            throw new EmployeeNotFoundException("Employee not found with id: "+id);
         }
     }
 }
