@@ -9,7 +9,7 @@ Develop a simple Employee Management System with a RESTful API using Spring Boot
    - Include the following dependencies:
      - Spring Web
      - Spring Data JPA
-     - H2 Database (for in-memory database)
+     - ***H2 Database (for in-memory database)***
      - Spring Boot DevTools
      - Lombok (optional but recommended for reducing boilerplate code)
 
@@ -62,13 +62,16 @@ Develop a simple Employee Management System with a RESTful API using Spring Boot
          <version>2.5.0</version>
    </dependency>
 ```
----
-
-### Deliverables:
-1. A GitHub repository with the complete source code.
-2. Detailed README file with instructions on how to set up and run the project locally.
-3. Postman collection (or similar) for testing the API endpoints.
-
+   - Example of Swagger annotations:
+```java
+@PostMapping("employee")
+@Operation(summary = "Add a new employee")
+@ApiResponses(value = {
+   @ApiResponse(responseCode = "201", description = "Employee created successfully"),
+   @ApiResponse(responseCode = "400", description = "Bad request")
+})
+```
+   - Use `http://localhost:8080/swagger-ui/index.html#/` to access the swagger UI for API documentation.
 ---
 
 ### Guidance:
