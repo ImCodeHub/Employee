@@ -14,7 +14,7 @@ Develop a simple Employee Management System with a RESTful API using Spring Boot
      - Lombok (optional but recommended for reducing boilerplate code)
 
 2. *Model:*
-   - Create an Employee entity with the following fields:[EmployeeEntity](https://github.com/ImCodeHub/Employee/blob/main/Employee/src/main/java/com/EmployeeManagement/Employee/Entity/Employee.java)
+   - Create an Employee entity with the following fields: [EmployeeEntity](https://github.com/ImCodeHub/Employee/blob/main/Employee/src/main/java/com/EmployeeManagement/Employee/Entity/Employee.java)
      - id (Long, Primary Key)
      - firstName (String)
      - lastName (String)
@@ -46,6 +46,32 @@ Develop a simple Employee Management System with a RESTful API using Spring Boot
      - Employee not found.
      - Duplicate email entries.
      - To validate E-mail format.
+       
+       ```java
+         @Service
+         public class Validator {
+         
+             private static final Logger logger = LoggerFactory.getLogger(Validator.class);
+         
+             @Autowired
+             private EmployeeRepository employeeRepository;
+         
+             public boolean isValidEmail(String email) {
+                 String emailRegex = "^[\\w-_\\.+]*[\\w-_\\.]\\@([\\w]+\\.)+[\\w]+$";
+                 boolean isValid = email.matches(emailRegex);
+                 logger.debug("Email validation for {} : {}", email, isValid);
+                 return isValid;
+             }
+         
+             public boolean isEmailUnique(String email) {
+                 Optional<Employee> existEmail = employeeRepository.findByEmail(email);
+                 boolean isUnique = existEmail.isEmpty();
+                 logger.debug("Email Uniqueness check for {} : {}", email, isUnique);
+                 return isUnique;
+         
+             }
+         }
+
 
 7. *Testing:*
    - Write unit tests for the service layer using JUnit and Mockito.
