@@ -129,6 +129,15 @@ Develop a simple Employee Management System with a RESTful API using Spring Boot
   
   spring.h2.console.enabled=true
 
+  *add this dependency for H2 database in your [pom.xml](https://github.com/ImCodeHub/Employee/blob/main/Employee/pom.xml) *
+   ```xml
+   <dependency>
+      		<groupId>com.h2database</groupId>
+      		<artifactId>h2</artifactId>
+      		<scope>runtime</scope>
+ 	</dependency>
+   ```
+
      ```properties
       spring.application.name=Employee
       # H2 database
